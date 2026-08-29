@@ -44,7 +44,7 @@ function ScanPageInner() {
     fetch(`/api/products/by-sku?sku=${encodeURIComponent(scannedSku)}`)
       .then((r) => r.json())
       .then((json) => {
-        if (json.data) setProduct(json.data)
+        if (json.data && json.data.length > 0) setProduct(json.data[0])
         else setError(`No product found for SKU: ${scannedSku}`)
       })
       .catch(() => setError('Failed to look up product'))
