@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const { items, globalReference } = bulkTransactionSchema.parse(json)
 
     // Run atomically
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       const createdTransactions = []
 
       for (const item of items) {

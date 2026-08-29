@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     ])
 
     const isWorker = profile.role === 'WORKER'
-    const sanitizedProducts = products.map(p => {
+    const sanitizedProducts = products.map((p: any) => {
       if (isWorker) {
         const { costPrice, sellingPrice, ...rest } = p
         return rest
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     let product;
 
     if (currentStock > 0) {
-      product = await prisma.$transaction(async (tx) => {
+      product = await prisma.$transaction(async (tx: any) => {
         const p = await tx.product.create({ data: { ...productData, currentStock } })
         await tx.transaction.create({
           data: {

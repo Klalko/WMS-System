@@ -91,7 +91,7 @@ export default async function TransactionsPage({
             {transactions.length === 0 ? (
               <tr><td colSpan={10} className="text-center text-muted py-12">No transactions found</td></tr>
             ) : (
-              transactions.map((tx) => (
+              transactions.map((tx: any) => (
                 <tr key={tx.id}>
                   <td>
                     <Link href={`/inventory/${tx.productId}`} className="font-medium text-white hover:text-primary transition-colors">

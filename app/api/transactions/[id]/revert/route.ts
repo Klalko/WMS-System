@@ -22,7 +22,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const compensatingType = originalTx.type === 'inbound' ? 'outbound' : 'inbound'
     const stockChange = compensatingType === 'inbound' ? originalTx.quantity : -originalTx.quantity
 
-    const reverted = await prisma.$transaction(async (tx) => {
+    const reverted = await prisma.$transaction(async (tx: any) => {
       // 1. Create compensating transaction
       const newTx = await tx.transaction.create({
         data: {

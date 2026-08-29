@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     const isWorker = profile.role === 'WORKER'
-    const sanitizedProducts = products.map(p => {
+    const sanitizedProducts = products.map((p: any) => {
       if (isWorker) {
         const { costPrice, sellingPrice, ...rest } = p
         return rest

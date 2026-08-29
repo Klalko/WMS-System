@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     const data = await prisma.$queryRawUnsafe<{partnerName: string, totalCost: number, totalEarnings: number}[]>(query)
     
     // Map BigInt/Decimal to string/number if necessary, but queryRaw un-typed returns values that might need casting
-    const formattedData = data.map(row => ({
+    const formattedData = data.map((row: any) => ({
       partnerName: row.partnerName,
       totalCost: Number(row.totalCost) || 0,
       totalEarnings: Number(row.totalEarnings) || 0,

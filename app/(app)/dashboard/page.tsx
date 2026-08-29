@@ -84,8 +84,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ con
   })
 
   const transactionsByDay = last7Days.map((date) => {
-    const inRow = txByDay.find((r) => r.date === date && r.type === 'inbound')
-    const outRow = txByDay.find((r) => r.date === date && r.type === 'outbound')
+    const inRow = txByDay.find((r: any) => r.date === date && r.type === 'inbound')
+    const outRow = txByDay.find((r: any) => r.date === date && r.type === 'outbound')
     return {
       date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       inbound: inRow ? Number(inRow.total) : 0,
@@ -105,7 +105,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ con
       stats={stats}
       lowStockProducts={lowStockProducts}
       recentTransactions={JSON.parse(JSON.stringify(recentTransactions))}
-      stockByProduct={stockData.map((p) => ({ name: p.name, stock: p.currentStock }))}
+      stockByProduct={stockData.map((p: any) => ({ name: p.name, stock: p.currentStock }))}
       transactionsByDay={transactionsByDay}
       partners={brands}
       selectedPartnerId={contactId || ''}
