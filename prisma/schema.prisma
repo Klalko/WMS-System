@@ -1,0 +1,97 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  WORKER
+
+}
+
+model Profile {
+  id        String   @id @db.Uuid
+  fullName  String?  @map("full_name")
+  role      Role     @default(WORKER)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  transactions Transaction[]
+
+  @@map("profiles")
+}
+
+model InvitedUser {
+  email     String   @id
+  role      Role     @default(WORKER)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("invited_users")
+}
+
+
+
+model Product {
+  id                String   @id @default(uuid()) @db.Uuid
+  sku               String
+  name              String
+  description       String?
+  currentStock      Int      @default(0) @map("current_stock")
+  unit              String   @default("pcs")
+  lowStockThreshold Int      @default(10) @map("low_stock_threshold")
+  
+  // V2 Expansion Fields
+  costPrice         Decimal? @map("cost_price") @db.Decimal(10, 2)
+  sellingPrice      Decimal? @map("selling_price") @db.Decimal(10, 2)
+  imageUrl          String?  @map("image_url")
+
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  contactId         String?  @map("contact_id") @db.Uuid
+  contact           Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  transactions Transaction[]
+
+  @@map("products")
+}
+
+model Transaction {
+  id           String   @id @default(uuid()) @db.Uuid
+  productId    String   @map("product_id") @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  type         String
+  quantity     Int
+  notes        String?
+  
+  // V2 Expansion Fields
+  supplierName String?  @map("supplier_name")
+  customerName String?  @map("customer_name")
+  unitPrice    Decimal? @map("unit_price") @db.Decimal(10, 2)
+
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}
+
+model Contact {
+  id        String   @id @default(uuid()) @db.Uuid
+  type      String   // "client" or "partner"
+  name      String
+  phone     String?
+  location  String?
+  email     String?
+  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  products  Product[]
+
+  @@map("contacts")
+}
